@@ -51,7 +51,7 @@ def plugin_app(parent) -> Tuple[tk.Label,tk.Label]:
   data["v3"] = tk.Label(frame, text='? (?)')
   data["l3"].grid(row=2,column=0,sticky=tk.W)
   data["v3"].grid(row=2,column=1)
-  data["resetb"] = tk.Button(frame, text=_('Reset'))
+  data["resetb"] = tk.Button(frame, text=_('Reset'),command=reset)
   data["resetb"].grid(row=3,column=0,columnspan=2)
   update_status()
   return (frame)
@@ -82,9 +82,7 @@ def journal_entry(
 
 def update_status() -> None:
   global data
-  logger.debug(data)
   if data["First"] == 0 or data["Last"] == 0 or data["Prospected"] == 0 or data["Hit"]:
-    logger.debug("Skipping")
     data["v1"]['text'] = "? (?)"
     data["v2"]['text'] = "? (?)"
     data["v3"]['text'] = "? (?)"
@@ -101,12 +99,11 @@ def update_status() -> None:
     data["v3"]['text'] = '{} / {}'.format(
       l10n.Locale.string_from_number(data["Mined"],0),
       l10n.Locale.string_from_number(3600*data["Mined"]/t,2))
-    logger.debug(data["v1"]['text'])
-    logger.debug(data["v2"]['text'])
-    logger.debug(data["v3"]['text'])
 
 def reset() -> None:
   global data
+  logger.debug("Resetting.")
+  logger.debug(data)
   data["Prospected"] = 0
   data["Hit"] = 0
   data["ReturnTotal"] = 0
