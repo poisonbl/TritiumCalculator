@@ -1,5 +1,4 @@
 import tkinter as tk
-import myNotebook as nb
 import logging
 import l10n
 import functools
@@ -8,7 +7,6 @@ import time
 
 from typing import Optional, Tuple, Dict, Any
 from config import appname
-
 
 plugin_name = os.path.basename(os.path.dirname(__file__))
 logger = logging.getLogger(f'{appname}.{plugin_name}')
@@ -20,7 +18,6 @@ laststate: Optional[Dict[str, Any]] = None
 data = {
   "Prospected":0,
   "Hit":0,
-  "ReturnHits":0,
   "ReturnTotal":0,
   "Mined":0,
   "First":0,
@@ -79,7 +76,6 @@ def journal_entry(
     data["Prospected"] += 1
     update_status()
 
-
 def update_status() -> None:
   global data
   if data["First"] == 0 or data["Last"] == 0 or data["Prospected"] == 0 or data["Hit"]:
@@ -90,13 +86,13 @@ def update_status() -> None:
     t = data["Last"]-data["First"]
     if t < 1:
       t = 1
-    data["v1"]['text'] = '{} / {}'.format(
+    data["v1"]['text'] = '{} ({})'.format(
       l10n.Locale.string_from_number(data["Hit"],0),
       l10n.Locale.string_from_number(data["Prospected"],0))
-    data["v2"]['text'] = '{} / {}'.format(
+    data["v2"]['text'] = '{} ({})'.format(
       l10n.Locale.string_from_number(data["ReturnTotal"]/data["Hit"],2),
       l10n.Locale.string_from_number(data["ReturnTotal"]/data["Prospected"],2))
-    data["v3"]['text'] = '{} / {}'.format(
+    data["v3"]['text'] = '{} ({})'.format(
       l10n.Locale.string_from_number(data["Mined"],0),
       l10n.Locale.string_from_number(3600*data["Mined"]/t,2))
 
@@ -111,4 +107,3 @@ def reset() -> None:
   data["First"] = 0
   data["Last"] = 0
   update_status()
-
